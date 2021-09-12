@@ -31,11 +31,18 @@ public class UserController {
 
     @PostMapping
     public User save(@RequestBody Map<String, String> body) {
+
         var username = body.get("username");
         var password = body.get("password");
+
+        if (username == null || password == null) {
+            throw new NullPointerException("Username and password mustn't be empty");
+        }
+
         if (password.length() < 6) {
             throw new IllegalArgumentException("Invalid password. Password length must be more than 5 characters.");
         }
+
         var user = new User(username, password);
         bankService.addUser(user);
         return user;
